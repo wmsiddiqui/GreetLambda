@@ -12,8 +12,11 @@ DestinationTopic - SNS Topic that the lambda publishes too. This has an email su
 The deploy script first clears out any contents in the deploy folder, it then builds and packages the files, and uploads it to an S3 bucket. It then uses CloudFormation to create the stack, using the Stack.json file as a template. 
 
 ## Requirements
-* .NET Core 1
+* .NET Core 1.0
 * AWS CLI configured to use us-east-1
+
+## Instructions
+If .NET Core and AWS CLI are installed and configured, all you need to do is change the email subscription in the Stack.json, and then run the deploy.ps1 script to deploy the application.
 
 ## ToDo
 
