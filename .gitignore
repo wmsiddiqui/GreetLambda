@@ -1,3 +1,4 @@
 /.vs/*
 /GreetLambda/obj/*
 /GreetLambda/bin/*
+/deploy/*

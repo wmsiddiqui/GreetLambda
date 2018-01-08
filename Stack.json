@@ -74,7 +74,7 @@
                 "FunctionName": "GreetLambda",
                 "Runtime": "dotnetcore1.0",
                 "Role": "arn:aws:iam::075919955183:role/lambda_exec_CsFunction",
-                "Handler": "TestLambdaProject::TestLambdaProject.Function::FunctionHandler"
+                "Handler": "GreetLambda::GreetLambda.Function::FunctionHandler"
             },
         },
         "DestinationPolicy": {

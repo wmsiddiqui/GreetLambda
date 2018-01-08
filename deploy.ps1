@@ -4,7 +4,7 @@ if (Test-Path "./deploy") {
 
 New-Item -Path ./deploy/bin -ItemType Directory -Force
 New-Item -Path ./deploy/compressed -ItemType Directory -Force
-dotnet publish "./TestLambdaProject/TestLambdaProject.csproj" --output "../deploy/bin"
+dotnet publish "./GreetLambda/GreetLambda.csproj" --output "../deploy/bin"
 
 [Reflection.Assembly]::LoadWithPartialName( "System.IO.Compression.FileSystem" )
 [System.IO.Compression.ZipFile]::CreateFromDirectory("./deploy/bin", "./deploy/compressed/package.zip")
