@@ -11,6 +11,10 @@ DestinationTopic - SNS Topic that the lambda publishes too. This has an email su
 ## The Script
 The deploy script first clears out any contents in the deploy folder, it then builds and packages the files, and uploads it to an S3 bucket. It then uses CloudFormation to create the stack, using the Stack.json file as a template. 
 
+## Requirements
+* .NET Core 1
+* AWS CLI configured to use us-east-1
+
 ## ToDo
 
 * The message can be a bit more complex, and can use a serialized JSON object. The app can use a JSON Deserializer and then apply logic to the incoming object. 
