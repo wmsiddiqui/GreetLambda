@@ -22,7 +22,7 @@ namespace GreetLambda
 
         public string GetSnsTopic()
         {
-            return $"arn:aws:sns:us-east-1:{GetAccountId()}:EndpointTopic";
+            return $"arn:aws:sns:us-east-1:{GetAccountId()}:DestinationTopic";
         }
     }
 }
