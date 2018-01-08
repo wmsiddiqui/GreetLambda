@@ -1,0 +1,152 @@
+{
+    "Resources": {
+        "SourceTopic": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+                "DisplayName": "SourceTopic",
+                "TopicName": "SourceTopic"
+            }        
+        },
+        "SourceLambdaSubscription": {
+            "Type": "AWS::SNS::Subscription",
+            "Properties": {
+                "TopicArn": {
+                    "Ref": "SourceTopic"
+                },
+                "Protocol": "lambda",
+                "Endpoint": {
+                    "Fn::GetAtt": [
+                        "GreetApp",
+                        "Arn"
+                    ]
+                }
+            },
+            "DependsOn": [
+                "GreetApp"
+            ]
+        },
+        "SourcePolicy": {
+            "Type": "AWS::SNS::TopicPolicy",
+            "Properties": {
+                "PolicyDocument": {
+                    "Id": "__default_policy_ID",
+                    "Version": "2008-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "__default_statement_ID",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "AWS": "*"
+                            },
+                            "Action": [
+                                "SNS:GetTopicAttributes",
+                                "SNS:SetTopicAttributes",
+                                "SNS:AddPermission",
+                                "SNS:RemovePermission",
+                                "SNS:DeleteTopic",
+                                "SNS:Subscribe",
+                                "SNS:ListSubscriptionsByTopic",
+                                "SNS:Publish",
+                                "SNS:Receive"
+                            ],
+                            "Resource": "*"
+                        }
+                    ]
+                },
+                "Topics": [
+                    {
+                        "Ref": "SourceTopic"
+                    }
+                ]
+            },
+            "DependsOn": [
+                "GreetApp"
+            ]
+        },
+        "GreetApp": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "Timeout": 30,
+                "Code": {
+                    "S3Bucket": "greet-lambda",
+                    "S3Key": "greet.zip"
+                },
+                "FunctionName": "GreetLambda",
+                "Runtime": "dotnetcore1.0",
+                "Role": "arn:aws:iam::075919955183:role/lambda_exec_CsFunction",
+                "Handler": "TestLambdaProject::TestLambdaProject.Function::FunctionHandler"
+            },
+        },
+        "DestinationPolicy": {
+            "Type": "AWS::SNS::TopicPolicy",
+            "Properties": {
+                "PolicyDocument": {
+                    "Version": "2008-10-17",
+                    "Id": "__default_policy_ID",
+                    "Statement": [
+                        {
+                            "Sid": "__default_statement_ID",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "AWS": "*"
+                            },
+                            "Action": [
+                                "SNS:Publish",
+                                "SNS:RemovePermission",
+                                "SNS:SetTopicAttributes",
+                                "SNS:DeleteTopic",
+                                "SNS:ListSubscriptionsByTopic",
+                                "SNS:GetTopicAttributes",
+                                "SNS:Receive",
+                                "SNS:AddPermission",
+                                "SNS:Subscribe"
+                            ],
+                            "Resource": "*"
+                        }
+                    ]
+                },
+                "Topics": [
+                    {
+                        "Ref": "DestinationTopic"
+                    }
+                ]
+            },
+            "DependsOn": [
+                "GreetApp"
+            ]
+        },
+        "DestinationTopic": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+                "DisplayName": "DestinationTopic",
+                "TopicName": "DestinationTopic"
+            }
+        },
+        "DestinationSubscription": {
+            "Type": "AWS::SNS::Subscription",
+            "Properties": {
+                "TopicArn": {
+                    "Ref": "DestinationTopic"
+                },
+                "Protocol": "email",
+                "Endpoint": "wmsiddiqui.6@gmail.com"
+            }
+        },
+        "TriggerPermission": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+                "Action": "lambda:InvokeFunction",
+                "Principal": "sns.amazonaws.com",
+                "SourceArn": {
+                    "Ref": "SourceTopic"
+                },
+                "FunctionName": {
+                    "Ref": "GreetApp"
+                }
+            },
+            "DependsOn": [
+                "SourceLambdaSubscription"
+            ]
+        }
+    }
+}
